@@ -2,6 +2,8 @@ import pyaudio
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import matplotlib.gridspec as gridspec
+from random import randint
 
 # Audio stream parameters
 FORMAT = pyaudio.paInt16  # Audio format (16-bit integer)
@@ -20,7 +22,11 @@ stream = p.open(format=FORMAT,
                 frames_per_buffer=CHUNK)
 
 # Create a matplotlib figure with 2 subplots (one for time-domain, one for frequency-domain)
-fig, (ax1, ax2) = plt.subplots(2, 1)
+fig = plt.figure(figsize=(8, 6))
+gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1], width_ratios=[1, 1])
+ax1 = fig.add_subplot(gs[0, 0])
+ax2 = fig.add_subplot(gs[1, 0])
+ax3 = fig.add_subplot(gs[:, 1])
 
 # Create an array for the x-axis of the time-domain plot (time samples)
 x_time = np.arange(0, CHUNK)
@@ -31,7 +37,7 @@ line_time, = ax1.plot(x_time, np.zeros(CHUNK))
 # Set the y-axis limits for time-domain plot to 16-bit PCM range
 ax1.set_ylim(-3000, 3000)
 ax1.set_xlim(0, CHUNK)
-ax1.set_title("Time Domain (Waveform)")
+ax1.set_title("Time Domain")
 ax1.set_xlabel("Samples")
 ax1.set_ylabel("Amplitude")
 
@@ -47,9 +53,14 @@ ax2.set_yscale('log')
 # Set plot titles and labels for frequency domain
 ax2.set_xlim(20, RATE//2)  # Frequency range from 20 Hz to Nyquist frequency (RATE/2)
 ax2.set_ylim(0, 100000)  # Adjust based on your signal strength
-ax2.set_title("Frequency Domain (FFT with Logarithmic Magnitude Scale)")
+ax2.set_title("Frequency Domain")
 ax2.set_xlabel("Frequency (Hz)")
-ax2.set_ylabel("Magnitude (Log Scale)")
+ax2.set_ylabel("Magnitude")
+
+# Set occupancy
+ax3.set_title("Occupancy")
+occupancy_count = ax3.text(0.5, 0.5, "", fontsize=200, ha="center", va="center")
+ax3.axis("off")
 
 # Function to apply a moving average filter to the frequency-domain data
 def moving_average(data, window_size=5):
@@ -72,8 +83,10 @@ def update_plots(frame):
     
     # Update the frequency-domain line data with the smoothed data
     line_freq.set_ydata(fft_data_smoothed)
+    occupancy_count_ = randint(0, 3)
+    occupancy_count.set_text(occupancy_count_)
     
-    return line_time, line_freq
+    return line_time, line_freq, occupancy_count
 
 # Create a real-time animation using FuncAnimation
 ani = FuncAnimation(fig, update_plots, blit=True, interval=30)
