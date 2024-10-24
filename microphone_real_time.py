@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import matplotlib.gridspec as gridspec
-from random import randint
+from collections import deque
 
 # Audio stream parameters
 FORMAT = pyaudio.paInt16  # Audio format (16-bit integer)
@@ -61,6 +61,12 @@ ax2.set_ylabel("Magnitude")
 ax3.set_title("Occupancy")
 occupancy_count = ax3.text(0.5, 0.5, "", fontsize=200, ha="center", va="center")
 ax3.axis("off")
+occupancies = deque(maxlen=5)
+
+def addElementAndGetMedian(queue, element):
+    queue.append(element)
+    sorted_queue = sorted(queue)
+    return 1 if np.mean(sorted_queue) > 0.3 else 0
 
 # Function to apply a moving average filter to the frequency-domain data
 def moving_average(data, window_size=5):
@@ -83,7 +89,8 @@ def update_plots(frame):
     
     # Update the frequency-domain line data with the smoothed data
     line_freq.set_ydata(fft_data_smoothed)
-    occupancy_count_ = randint(0, 3)
+    occupancy_count_ = 1 if np.mean(np.std(data)) > 20 else 0
+    occupancy_count_ = addElementAndGetMedian(occupancies, occupancy_count_)
     occupancy_count.set_text(occupancy_count_)
     
     return line_time, line_freq, occupancy_count
