@@ -8,10 +8,10 @@ from collections import deque
 
 # Audio stream parameters
 AUDIO_FORMAT = pyaudio.paInt16  # 16-bit integer
-AUDIO_CHANNELS = 1              # Number of audio channels (mono)
+AUDIO_CHANNELS = 1              # Mono
 SAMPLING_RATE = 44100
 AUDIO_BUFFER = 1024             # Frames per buffer
-SMOOTH_FFT = False
+SMOOTH_FFT = True
 
 
 # Open audio stream from the microphone
@@ -78,8 +78,9 @@ def update_plots(frame):
     # FFT
     fft_data = np.abs(np.fft.fft(data))[:AUDIO_BUFFER//2]
     fft_data += 1
-    fft_data_smoothed = moving_average(fft_data, window_size=9)
-    plot_frequency_data.set_ydata(fft_data_smoothed)
+    if SMOOTH_FFT:
+        fft_data = moving_average(fft_data, window_size=9)
+    plot_frequency_data.set_ydata(fft_data)
     
     # Occupancy
     occupancy_count = 1 if np.mean(np.std(data)) > 20 else 0
