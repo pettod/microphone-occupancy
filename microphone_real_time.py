@@ -11,7 +11,7 @@ AUDIO_FORMAT = pyaudio.paInt16  # 16-bit integer
 AUDIO_CHANNELS = 1              # Mono
 SAMPLING_RATE = 44100
 AUDIO_BUFFER = 1024             # Frames per buffer
-SMOOTH_FFT = True
+SMOOTH_FFT = False
 
 
 # Open audio stream from the microphone
@@ -23,6 +23,7 @@ stream = p.open(
     input=True,
     frames_per_buffer=AUDIO_BUFFER,
 )
+is_paused = False
 
 # Figure and axes
 fig = plt.figure(figsize=(8, 6))
@@ -88,6 +89,18 @@ def update_plots(frame):
     plot_occupancy_count.set_text(occupancy_count)
     
     return plot_time_data, plot_frequency_data, plot_occupancy_count
+
+def pauseAnimation(event):
+    global is_paused
+    if event.key == " ":  # Check if the space bar was pressed
+        if is_paused:
+            animation.event_source.start()  # Resume the animation
+        else:
+            animation.event_source.stop()   # Pause the animation
+        is_paused = not is_paused
+
+# Pause/Resume playing
+fig.canvas.mpl_connect("key_press_event", pauseAnimation)
 
 # Update plot
 animation = FuncAnimation(fig, update_plots, blit=True, interval=30)
