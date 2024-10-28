@@ -45,10 +45,6 @@ class MicrophonePlot:
         self.ax2 = self.fig.add_subplot(self.gs[1, 0])
         self.ax3 = self.fig.add_subplot(self.gs[:, 1])
 
-        # x1-axis time data and time-domain plot
-        self.x_time = np.arange(0, AUDIO_BUFFER)
-        self.plot_time_data, = self.ax1.plot(self.x_time, np.zeros(AUDIO_BUFFER))
-
         # ax1 plot
         self.ax1.set_ylim(-3000, 3000)
         self.ax1.set_xlim(0, AUDIO_BUFFER)
@@ -57,9 +53,9 @@ class MicrophonePlot:
         self.ax1.set_ylabel("Amplitude")
         self.ax2.set_yscale("log")
 
-        # x2-axis frequency-domain data and plot
-        self.x_freq = np.fft.fftfreq(AUDIO_BUFFER, 1/SAMPLING_RATE)[:AUDIO_BUFFER//2]  # Only positive frequencies
-        self.plot_frequency_data, = self.ax2.plot(self.x_freq, np.zeros(AUDIO_BUFFER//2))
+        # x1-axis time data and time-domain plot
+        self.x_time = np.arange(0, AUDIO_BUFFER)
+        self.plot_time_data, = self.ax1.plot(self.x_time, np.zeros(AUDIO_BUFFER))
 
         # ax2 plot
         self.ax2.set_xlim(20, SAMPLING_RATE//2)  # Nyquist frequency (SAMPLING_RATE/2)
@@ -67,6 +63,10 @@ class MicrophonePlot:
         self.ax2.set_title("Frequency Domain")
         self.ax2.set_xlabel("Frequency (Hz)")
         self.ax2.set_ylabel("Magnitude")
+
+        # x2-axis frequency-domain data and plot
+        self.x_freq = np.fft.fftfreq(AUDIO_BUFFER, 1/SAMPLING_RATE)[:AUDIO_BUFFER//2]  # Only positive frequencies
+        self.plot_frequency_data, = self.ax2.plot(self.x_freq, np.zeros(AUDIO_BUFFER//2))
 
         # ax3 plot
         self.ax3.set_title("Occupancy")
