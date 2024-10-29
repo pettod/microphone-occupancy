@@ -32,13 +32,14 @@ label.pack(pady=5)
 frame = tk.Frame(root)
 frame.pack()
 
-# Create buttons for numbers 1 to 30
-for i in range(1, 31):
-    # Create a button with the number, and set the command to call show_number with that number
-    button = tk.Button(frame, text=str(i), font=("Arial", 14), width=4, height=2,
-                       command=lambda i=i: show_number(i))
+# Create buttons for numbers 0 to 29
+for i in range(0, 30):
+    button = tk.Button(
+        frame, text=str(i), font=("Arial", 14), width=4, height=2,
+        command=lambda i=i: show_number(i)
+    )
     # Arrange buttons in a 5x6 grid
-    button.grid(row=(i - 1) // 5, column=(i - 1) % 5, padx=5, pady=5)
+    button.grid(row=i // 5, column=i % 5, padx=5, pady=5)
 
 # Run the application
 root.mainloop()
