@@ -2,14 +2,19 @@ import csv
 import tkinter as tk
 from datetime import datetime
 import time
+import os
 
 TIME_STAMP = datetime.now().strftime("%Y-%m-%d__%H-%M-%S")
 RECORDING_NAME = input("Recording_name: ").replace(" ", "_")
-csv_file = f"data_gathering/{TIME_STAMP}_{RECORDING_NAME}.csv"
+FOLDER = "data_gathering"
+os.makedirs(FOLDER, exist_ok=True)
+csv_file = f"{FOLDER}/{TIME_STAMP}_{RECORDING_NAME}.csv"
 
 with open(csv_file, mode="w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(["Time", "Seconds", "Count"])
+print("File created:")
+print(csv_file)
 
 def show_number(number):
     current_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
