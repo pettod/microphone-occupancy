@@ -1,3 +1,4 @@
 *.csv
 *.wav
 *.WAV
+*.DS_Store
