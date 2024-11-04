@@ -27,7 +27,7 @@ def show_number(number):
 # Initialize the main application window
 root = tk.Tk()
 root.title("Occupancy data")
-root.geometry("400x400")
+root.geometry("800x400")
 
 # Create a label to display the selected number
 label = tk.Label(root, text="None", font=("Arial", 50))
@@ -38,13 +38,20 @@ frame = tk.Frame(root)
 frame.pack()
 
 # Create buttons for numbers 0 to 29
-for i in range(0, 30):
+j = 0
+for i in (
+    list(range(0, 30)) +
+    list(range(30, 50, 2)) +
+    list(range(50, 100, 5)) +
+    list(range(100, 200, 10))
+):
     button = tk.Button(
         frame, text=str(i), font=("Arial", 14), width=4, height=2,
         command=lambda i=i: show_number(i)
     )
     # Arrange buttons in a 5x6 grid
-    button.grid(row=i // 5, column=i % 5, padx=5, pady=5)
+    button.grid(row=j // 10, column=j % 10, padx=5, pady=5)
+    j += 1
 
 # Run the application
 root.mainloop()
