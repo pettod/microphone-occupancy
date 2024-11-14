@@ -50,10 +50,10 @@ frame.pack()
 # Create buttons for numbers 0 to 29
 j = 0
 for i in (
-    list(range(0, 30)) +
-    list(range(30, 50, 2)) +
-    list(range(50, 100, 5)) +
-    list(range(100, 200, 10))
+    list(range(0, 60))
+    #list(range(30, 50, 2)) +
+    #list(range(50, 100, 5)) +
+    #list(range(100, 200, 10))
 ):
     button = tk.Button(
         frame, text=str(i), font=("Arial", 14), width=4, height=2,
