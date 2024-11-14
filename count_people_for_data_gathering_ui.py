@@ -7,16 +7,25 @@ import os
 TIME_STAMP = datetime.now().strftime("%Y-%m-%d__%H-%M-%S")
 RECORDING_NAME = input("Recording_name: ").replace(" ", "_")
 FOLDER = "data_gathering"
+
+# CSV file
 os.makedirs(FOLDER, exist_ok=True)
 csv_file = f"{FOLDER}/{TIME_STAMP}_{RECORDING_NAME}.csv"
-first_time = None
-
 with open(csv_file, mode="w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(["Time", "Seconds", "Seconds-from-start", "Count"])
 print("File created:")
 print(csv_file)
 
+# Backup CSV
+backup_folder = f"{FOLDER}_backup"
+os.makedirs(backup_folder, exist_ok=True)
+backup_csv_file = f"{backup_folder}/{TIME_STAMP}_{RECORDING_NAME}.csv"
+with open(backup_csv_file, mode="w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Time", "Seconds", "Seconds-from-start", "Count"])
+
+first_time = None
 def show_number(occupancy_count):
     current_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     time_in_seconds = time.time()
@@ -24,7 +33,18 @@ def show_number(occupancy_count):
     if first_time is None:
         first_time = time_in_seconds
     seconds_from_start = time_in_seconds - first_time
+
+    # Write CSV
     with open(csv_file, mode="a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([
+            current_time,
+            round(time_in_seconds, 2),
+            round(seconds_from_start, 2),
+            occupancy_count,
+        ])
+    # Write backup CSV
+    with open(backup_csv_file, mode="a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([
             current_time,
