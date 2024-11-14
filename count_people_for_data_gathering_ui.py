@@ -57,7 +57,7 @@ def show_number(occupancy_count):
 # Initialize the main application window
 root = tk.Tk()
 root.title("Occupancy data")
-root.geometry("800x400")
+root.geometry("800x520")
 
 # Create a label to display the selected number
 label = tk.Label(root, text="None", font=("Arial", 50))
@@ -70,7 +70,7 @@ frame.pack()
 # Create buttons for numbers 0 to 29
 j = 0
 for i in (
-    list(range(0, 60))
+    list(range(0, 80))
     #list(range(30, 50, 2)) +
     #list(range(50, 100, 5)) +
     #list(range(100, 200, 10))
