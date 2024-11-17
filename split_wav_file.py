@@ -3,6 +3,7 @@ import os
 
 
 FILE_NAME = "20241102_111235.WAV"
+SEGMENT_DURATION_MS = 260000
 OUTPUT_FOLDER = "output_segments"
 
 
@@ -28,4 +29,4 @@ def split_wav(file_path, segment_duration_ms, output_folder):
 
 
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-split_wav(FILE_NAME, segment_duration_ms=260000, output_folder=OUTPUT_FOLDER)
+split_wav(FILE_NAME, segment_duration_ms=SEGMENT_DURATION_MS, output_folder=OUTPUT_FOLDER)
