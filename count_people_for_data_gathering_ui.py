@@ -5,7 +5,7 @@ import time
 import os
 
 TIME_STAMP = datetime.now().strftime("%Y-%m-%d__%H-%M-%S")
-RECORDING_NAME = input("Recording_name: ").replace(" ", "_")
+RECORDING_NAME = input("Recording_name: ").replace(" ", "_").replace(".", "-")
 FOLDER = "data_gathering"
 
 # CSV file
