@@ -58,7 +58,7 @@ class Count:
         elif minutes >= 3:
             color = "orange"
         else:
-            color = "white"
+            color = None
         self.time_label.config(
             text=f"Time since last click: {minutes:02}:{seconds:02}",
             anchor="e",
