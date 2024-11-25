@@ -71,17 +71,26 @@ class Count:
     def initializeWindow(self):
         # Initialize the main application window
         self.root.title("Occupancy data")
-        self.root.geometry("800x500")
+        self.root.geometry("800x550")
 
-        # Create a label to display the selected number
+        # Label of last click
         self.time_label = tk.Label(
             self.root, text="Time since last click: 00:00",
             font=("Arial", 15),
             anchor="e",
         )
         self.time_label.pack(pady=5, padx=20, fill="x")
+
+        # Create a label to display the selected number
         self.count_label = tk.Label(self.root, text="None", font=("Arial", 50))
         self.count_label.pack(pady=5)
+
+        # Break button
+        button = tk.Button(
+            self.root, text="Break", font=("Arial", 14), width=4, height=2,
+            command=lambda count="Break": self.showNumber(count)
+        )
+        button.pack(pady=5)
 
         # Create a frame to hold the buttons in a grid layout
         frame = tk.Frame(self.root)
