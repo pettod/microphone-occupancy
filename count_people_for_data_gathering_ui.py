@@ -15,6 +15,8 @@ class Count:
         self.csv_file = csv_file
         self.backup_csv_file = backup_csv_file
         self.first_time = None
+        self.last_clicked_time = datetime.now()
+        self.root = tk.Tk()
 
     def showNumber(self, occupancy_count):
         current_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -41,26 +43,54 @@ class Count:
                 round(seconds_from_start, 2),
                 occupancy_count,
             ])
-        self.label.config(text=f"{occupancy_count}")
+        self.count_label.config(text=f"{occupancy_count}")
+        self.resetTimer()
+
+    def resetTimer(self):
+        self.last_clicked_time = datetime.now()
+
+    def update_timer(self):
+        elapsed_time = datetime.now() - self.last_clicked_time
+        minutes = elapsed_time.seconds // 60
+        seconds = elapsed_time.seconds % 60
+        if minutes >= 5:
+            color = "red"
+        elif minutes >= 3:
+            color = "orange"
+        else:
+            color = "white"
+        self.time_label.config(
+            text=f"Time since last click: {minutes:02}:{seconds:02}",
+            anchor="e",
+            fg=color,
+        )
+
+        # Update every 100 ms
+        self.root.after(100, self.update_timer)
 
     def initializeWindow(self):
         # Initialize the main application window
-        root = tk.Tk()
-        root.title("Occupancy data")
-        root.geometry("800x520")
+        self.root.title("Occupancy data")
+        self.root.geometry("800x500")
 
         # Create a label to display the selected number
-        self.label = tk.Label(root, text="None", font=("Arial", 50))
-        self.label.pack(pady=5)
+        self.time_label = tk.Label(
+            self.root, text="Time since last click: 00:00",
+            font=("Arial", 15),
+            anchor="e",
+        )
+        self.time_label.pack(pady=5, padx=20, fill="x")
+        self.count_label = tk.Label(self.root, text="None", font=("Arial", 50))
+        self.count_label.pack(pady=5)
 
         # Create a frame to hold the buttons in a grid layout
-        frame = tk.Frame(root)
+        frame = tk.Frame(self.root)
         frame.pack()
 
         # Create buttons for numbers 0 to 29
         j = 0
         for i in (
-            list(range(0, 80))
+            list(range(0, 70))
             #list(range(30, 50, 2)) +
             #list(range(50, 100, 5)) +
             #list(range(100, 200, 10))
@@ -74,7 +104,8 @@ class Count:
             j += 1
 
         # Run the application
-        root.mainloop()
+        self.update_timer()
+        self.root.mainloop()
 
 
 def main():
